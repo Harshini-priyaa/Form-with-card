@@ -48,12 +48,13 @@
     --ring: 142.4 71.8% 29.2%;
   }
 }
+
 @layer base {
   * {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-black text-foreground; /* Ensure the body background is black */
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }

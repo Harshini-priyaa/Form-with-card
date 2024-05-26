@@ -1,6 +1,8 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+import React from 'react';
+import './style.css';
 import { ProfileForm } from './Form';
+
 function App() {
   return (
     <div className="App">

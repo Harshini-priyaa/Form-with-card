@@ -1,0 +1,27 @@
+.separator-container {
+    display: flex;
+    align-items: center;
+}
+
+.separator-card {
+    background-color: #444; /* Slightly lighter background for better contrast */
+    color: #fff;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.separator-card p {
+    margin: 0;
+    text-align: justify;
+}
+
+.separator-vertical {
+    width: 1px;
+    height: 40px;
+    background-color: #ccc;
+    margin: 0 10px;
+}
