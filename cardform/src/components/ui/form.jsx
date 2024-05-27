@@ -5,8 +5,6 @@ import { Controller, FormProvider, useFormContext } from "react-hook-form";
 import { cn } from "../../lib/utils"
 import { Label } from "./label"
 
-const Form = FormProvider
-
 const FormFieldContext = React.createContext({})
 
 const FormField = (
@@ -123,7 +121,7 @@ FormMessage.displayName = "FormMessage"
 
 export {
   useFormField,
-  Form,
+  FormProvider, // Add FormProvider here
   FormItem,
   FormLabel,
   FormControl,

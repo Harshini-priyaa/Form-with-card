@@ -1,23 +1,14 @@
-"use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useForm, FormProvider, useFormState } from "react-hook-form";
 
+import { z } from "zod";
+import { useState } from "react";
 import { Button } from "./components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "./components/ui/form";
-import { Input } from "./components/ui/input";
+import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "./components/ui/form";
 
 import { SeparatorDemo } from "./Separator";
-import { Badge } from "./components/ui/badge";
+import RolesInput from "./RolesInput";
+import { FormTextField } from "./FormTextField";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -26,67 +17,74 @@ const formSchema = z.object({
   description: z.string().min(5, {
     message: "Description must be at least 5 characters.",
   }),
+  roles: z.array(z.string().min(1)).optional(),
 });
 
 export function ProfileForm() {
-  const form = useForm({
+  const methods = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
       description: "",
+      roles: [],
     },
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const { handleSubmit } = methods;
+
+  const formState = useFormState({ control: methods.control });
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isCancelled, setIsCancelled] = useState(false);
+
+  const onSubmit = async (data) => {
+    if (formState.isValid) {
+      // Assuming the data is successfully submitted to an API or processed
+      console.log("Submitted Data:", data);
+      setIsSubmitted(true);
+      setIsCancelled(false);
+    } else {
+      // If any required field is not filled, display an error or alert
+      alert("Please fill in all details and select a separator card.");
+    }
+  };
+
+  const onCancel = () => {
+    setIsSubmitted(false);
+    setIsCancelled(true);
+    methods.reset(); // Reset form fields
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-black">
-      <div className="form-container max-w-md">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
+      <div className="form-container max-w-md p-6 bg-gray-800 rounded-lg shadow-md">
+        <FormProvider {...methods}>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <FormTextField
+              control={methods.control}
               name="username"
-              render={({ field }) => (
-                <FormItem className="form-item">
-                  <FormLabel className="text-white">Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Company Name" {...field} className="text-black" />
-                  </FormControl> 
-                  <FormDescription className="form-description">
-                    What is the name of your company or team?
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="Name"
+              placeholder="Company Name"
+              description="What is the name of your company or team?"
+              validation={formSchema.username}
             />
-            <FormField
-              control={form.control}
+            <FormTextField
+              control={methods.control}
               name="description"
-              render={({ field }) => (
-                <FormItem className="form-item">
-                  <FormLabel className="text-white">Description</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Company Description" {...field} className="text-black" />
-                  </FormControl>
-                  <FormDescription className="form-description">
-                    Describe your company?
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="Description"
+              placeholder="Company Description"
+              description="Describe your company?"
+              validation={formSchema.description}
             />
             <SeparatorDemo className="separator-demo" />
             <FormField
-              control={form.control}
+              control={methods.control}
               name="roles"
-              render={({ field }) => (
+              render={() => (
                 <FormItem className="form-item">
                   <FormLabel className="text-white">Roles</FormLabel>
                   <FormControl>
-                    <Input placeholder="Role " {...field} className="text-black" />
+                    <RolesInput />
                   </FormControl>
                   <FormDescription className="form-description">
                     The current role you play in your company
@@ -95,9 +93,10 @@ export function ProfileForm() {
                 </FormItem>
               )}
             />
-            <FormMessage />
+            {isSubmitted && <p>Details successfully submitted!</p>}
+            {isCancelled && <p>Details cancelled!</p>}
             <div className="button-container">
-              <Button type="button" className="bg-red-500 text-white">
+              <Button type="button" className="bg-red-500 text-white" onClick={onCancel}>
                 Cancel
               </Button>
               <Button type="submit" className="bg-green-600 text-white">
@@ -105,7 +104,7 @@ export function ProfileForm() {
               </Button>
             </div>
           </form>
-        </Form>
+        </FormProvider>
       </div>
     </div>
   );

@@ -66,7 +66,7 @@ body {
 }
 
 .text-black {
-    color: #fff;
+    color: #000;
 }
 
 .bg-gray-700 {
@@ -170,8 +170,8 @@ button:active {
 /* Style for SeparatorDemo */
 .separator-demo {
     display: flex;
-    flex-direction: column; /* Align items vertically */
-    align-items: stretch; /* Stretch items to fill container */
+    flex-direction: column; 
+    align-items: stretch; 
     gap: 1rem;
 }
 
