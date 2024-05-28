@@ -1,14 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, FormProvider, useFormState } from "react-hook-form";
-
+import { useForm, FormProvider, useFormState, Controller } from "react-hook-form";
 import { z } from "zod";
 import { useState } from "react";
 import { Button } from "./components/ui/button";
-import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "./components/ui/form";
-
+import { FormField, FormItem as OriginalFormItem, FormLabel, FormControl, FormDescription, FormMessage } from "./components/ui/form";
 import { SeparatorDemo } from "./Separator";
 import RolesInput from "./RolesInput";
-import { FormTextField } from "./FormTextField";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -31,20 +28,16 @@ export function ProfileForm() {
   });
 
   const { handleSubmit } = methods;
-
   const formState = useFormState({ control: methods.control });
-
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCancelled, setIsCancelled] = useState(false);
 
   const onSubmit = async (data) => {
     if (formState.isValid) {
-      // Assuming the data is successfully submitted to an API or processed
       console.log("Submitted Data:", data);
       setIsSubmitted(true);
       setIsCancelled(false);
     } else {
-      // If any required field is not filled, display an error or alert
       alert("Please fill in all details and select a separator card.");
     }
   };
@@ -52,7 +45,7 @@ export function ProfileForm() {
   const onCancel = () => {
     setIsSubmitted(false);
     setIsCancelled(true);
-    methods.reset(); // Reset form fields
+    methods.reset();
   };
 
   return (
@@ -60,15 +53,15 @@ export function ProfileForm() {
       <div className="form-container max-w-md p-6 bg-gray-800 rounded-lg shadow-md">
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <FormTextField
+            <CustomFormItem
               control={methods.control}
               name="username"
               label="Name"
-              placeholder="Company Name"
-              description="What is the name of your company or team?"
+              placeholder="Organization name"
+              description="What's the name of your company or team?"
               validation={formSchema.username}
             />
-            <FormTextField
+            <CustomFormItem
               control={methods.control}
               name="description"
               label="Description"
@@ -81,7 +74,7 @@ export function ProfileForm() {
               control={methods.control}
               name="roles"
               render={() => (
-                <FormItem className="form-item">
+                <OriginalFormItem className="form-item">
                   <FormLabel className="text-white">Roles</FormLabel>
                   <FormControl>
                     <RolesInput />
@@ -90,7 +83,7 @@ export function ProfileForm() {
                     The current role you play in your company
                   </FormDescription>
                   <FormMessage />
-                </FormItem>
+                </OriginalFormItem>
               )}
             />
             {isSubmitted && <p>Details successfully submitted!</p>}
@@ -106,6 +99,30 @@ export function ProfileForm() {
           </form>
         </FormProvider>
       </div>
+    </div>
+  );
+}
+
+export function CustomFormItem({ control, name, label, placeholder, description, validation }) {
+  return (
+    <div className="form-item">
+      <FormLabel className="text-white">{label}</FormLabel>
+      <FormControl>
+        <Controller
+          name={name}
+          control={control}
+          rules={{ required: validation }}
+          render={({ field }) => (
+            <input
+              {...field}
+              placeholder={placeholder}
+              className="form-input"
+            />
+          )}
+        />
+      </FormControl>
+      <FormDescription className="form-description">{description}</FormDescription>
+      <FormMessage />
     </div>
   );
 }

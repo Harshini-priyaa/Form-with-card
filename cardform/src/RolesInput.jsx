@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
-import { Badge } from './components/ui/badge';
+import { Button } from './components/ui/button';
 
 const RolesInput = () => {
   const { control, register } = useFormContext();
@@ -46,16 +46,12 @@ const RolesInput = () => {
       </div>
       <div className="mt-2 flex flex-wrap space-x-2">
         {fields.map((field, index) => (
-          <Badge key={field.id} className="flex items-center space-x-2">
-            <span>{field.value}</span>
-            <button
-              type="button"
-              onClick={() => remove(index)}
-              className="text-red-500"
-            >
+          <span key={field.id} className="badge">
+            {field.value}
+            <button type="button" onClick={() => remove(index)} className="text-red-500">
               &times;
             </button>
-          </Badge>
+          </span>
         ))}
       </div>
     </div>
