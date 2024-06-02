@@ -1,18 +1,20 @@
 // src/App.js
 import React from 'react';
-//import './style.css';
-import './NewProjectInterface.css';
-import { ProfileForm } from './Form';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NewProjectInterface from './NewProjectInterface';
+import { ProfileForm } from './Form';
+import './NewProjectInterface.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        {/* <ProfileForm/> */}
-      </header>
-      <NewProjectInterface />
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<NewProjectInterface />} />
+          <Route path="/new-project" element={<ProfileForm />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

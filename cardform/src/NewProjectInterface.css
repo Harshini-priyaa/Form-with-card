@@ -1,60 +1,84 @@
-/* src/NewProjectInterface.css */
-.new-project-interface {
-    background-color: #121212;
-    color: white;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .interface-header {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    padding: 20px;
-    background-color: #121212;
-  }
-  
-  .new-project {
-    background-color: #28a745;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .search-bar {
-    padding: 10px;
-    border-radius: 5px;
-    border: none;
-    width: 300px;
-  }
-  
-  .interface-main {
-    text-align: center;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .no-projects {
-    border: 1px dashed white;
-    padding: 50px;
-    border-radius: 10px;
-    text-align: center;
-  }
-  
-  .new-project-main {
-    background-color: #28a745;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-  }
-  
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #121212;
+  color: white;
+}
+
+.app-container {
+  text-align: center;
+}
+
+.app-header {
+  background-color: #121212; /* Same as background color */
+  padding: 20px;
+}
+
+.app-header h1 {
+  font-size: 2em; /* Make the word "Projects" bigger */
+}
+
+
+
+.app-main {
+  padding: 20px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-start; /* Align to the left */
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.new-project-button,
+.new-organization-button,
+.new-project-button-main {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 10px; /* Small border radius */
+}
+
+.new-project-button-main {
+  margin-top: 20px;
+}
+
+.search-input {
+  padding: 10px;
+  width: 200px;
+}
+
+.project-list {
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: left; /* Align text to the left */
+}
+
+.project-title {
+  font-weight: bold; /* Make "Fuzionest" bold */
+  font-size: 1.6rem;
+}
+
+.no-projects {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center elements */
+}
+
+.no-projects h4 {
+  font-size: 1rem;
+}
+
+.no-projects p {
+  margin: 10px 0; /* Add some margin to separate the paragraph from the heading and button */
+  text-align: center; /* Center the paragraph text */
+}
+
+.new-project-button-main {
+  align-self: center; /* Center the button */
+}
