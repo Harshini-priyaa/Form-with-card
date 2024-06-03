@@ -1,9 +1,8 @@
-// src/NewProjectInterface.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './NewProjectInterface.css';
 
-const NewProjectInterface = () => {
+const NewProjectInterface = ({ projects }) => {
   const navigate = useNavigate();
 
   const handleNewProjectClick = () => {
@@ -24,13 +23,23 @@ const NewProjectInterface = () => {
         <section className="project-list">
           <h2 className="project-title">Fuzionest</h2>
           <hr />
-          <div className="no-projects">
-            <h4>No projects</h4>
-            <p>Get started by creating a new project.</p>
-            <button className="new-project-button-main" onClick={handleNewProjectClick}>
-              + New Project
-            </button>
-          </div>
+          {projects.length === 0 ? (
+            <div className="no-projects">
+              <h4>No projects</h4>
+              <p>Get started by creating a new project.</p>
+              <button className="new-project-button-main" onClick={handleNewProjectClick}>
+                + New Project
+              </button>
+            </div>
+          ) : (
+            projects.map((project, index) => (
+              <div key={index} className="project-card">
+                <h3>{project.username}</h3>
+                <p>{project.description}</p>
+                <p>Roles: {project.roles.join(', ')}</p>
+              </div>
+            ))
+          )}
         </section>
       </main>
     </div>

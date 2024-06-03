@@ -191,7 +191,7 @@ h4 {
 .badge {
     display: inline-block;
     padding: 0.1rem 0.10rem;
-    border-radius: 3rem; /* Make it oval-shaped */
+    border-radius: 0.75rem; /* Make it oval-shaped */
     background-color: #efeff5;
     color: #30303e;
     font-size: 0.875rem;

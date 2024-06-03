@@ -6,7 +6,9 @@ import { Button } from "./components/ui/button";
 import { FormField, FormItem as OriginalFormItem, FormLabel, FormControl, FormDescription, FormMessage } from "./components/ui/form";
 import { SeparatorDemo } from "./Separator";
 import RolesInput from "./RolesInput";
+import { useNavigate } from 'react-router-dom';
 import "./style.css";
+
 const formSchema = z.object({
   username: z.string().min(2, {
     message: "Username must be at least 2 characters.",
@@ -17,7 +19,8 @@ const formSchema = z.object({
   roles: z.array(z.string().min(1)).optional(),
 });
 
-export function ProfileForm() {
+export function ProfileForm({ addProject }) {
+  const navigate = useNavigate();
   const methods = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,13 +37,16 @@ export function ProfileForm() {
 
   const onSubmit = async (data) => {
     if (formState.isValid) {
-      console.log("Submitted Data:", data);
+      console.log("Submitted Data:", data); // Debugging: Check submitted data
+      addProject(data);
       setIsSubmitted(true);
       setIsCancelled(false);
+      navigate(`/project/${data.username}`);
     } else {
       alert("Please fill in all details and select a separator card.");
     }
   };
+  
 
   const onCancel = () => {
     setIsSubmitted(false);

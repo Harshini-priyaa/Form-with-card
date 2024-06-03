@@ -82,3 +82,20 @@ body {
 .new-project-button-main {
   align-self: center; /* Center the button */
 }
+.project-card {
+  background-color: #1e1e1e;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: left;
+}
+
+.project-card h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.project-card p {
+  margin: 5px 0;
+}
