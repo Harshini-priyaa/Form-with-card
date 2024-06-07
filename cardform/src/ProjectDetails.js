@@ -8,7 +8,7 @@ const ProjectDetails = ({ projects }) => {
     const project = projects.find(proj => proj.username === projectName);
   
     if (!project) {
-      return <div>Project found</div>;
+      return <div>Project not found</div>;
     }
   
     return (
