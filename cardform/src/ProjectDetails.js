@@ -14,7 +14,7 @@ const ProjectDetails = ({ projects }) => {
     return (
       <div className="app-container">
         <header className="app-header">
-          <h1><b>Project</b></h1>
+          <h1><b>Projects</b></h1>
           <hr />
         </header>
         <main className="app-main">
