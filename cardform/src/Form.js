@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, FormProvider, useFormState, Controller } from "react-hook-form";
+import { useForm, FormProvider, Controller } from "react-hook-form";
 import { z } from "zod";
 import { useState } from "react";
 import { Button } from "./components/ui/button";
@@ -10,12 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import "./style.css";
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  description: z.string().min(5, {
-    message: "Description must be at least 5 characters.",
-  }),
+  username: z.string().min(2, { message: "Username must be at least 2 characters." }),
+  description: z.string().min(5, { message: "Description must be at least 5 characters." }),
   roles: z.array(z.string().min(1)).optional(),
 });
 
@@ -23,27 +19,28 @@ export function ProfileForm({ addProject }) {
   const navigate = useNavigate();
   const methods = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: "",
-      description: "",
-      roles: [],
-    },
+    defaultValues: { username: "", description: "", roles: [] },
   });
 
-  const { handleSubmit } = methods;
-  const formState = useFormState({ control: methods.control });
+  const { handleSubmit, control, reset } = methods;
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCancelled, setIsCancelled] = useState(false);
 
   const onSubmit = async (data) => {
-    if (formState.isValid) {
-      console.log("Submitted Data:", data); // Debugging: Check submitted data
-      addProject(data);
-      setIsSubmitted(true);
-      setIsCancelled(false);
-      navigate(`/project/${data.username}`);
-    } else {
-      alert("Please fill in all details and select a separator card.");
+    try {
+      await methods.trigger();
+      if (methods.formState.isValid) {
+        console.log("Submitted Data:", data); // Debugging: Check submitted data
+        addProject(data);
+        setIsSubmitted(true);
+        setIsCancelled(false);
+        alert("Details successfully submitted!");
+        navigate(`/project/${data.username}`);
+      } else {
+        alert("Please fill in all details and select a separator card.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
     }
   };
   
@@ -51,7 +48,7 @@ export function ProfileForm({ addProject }) {
   const onCancel = () => {
     setIsSubmitted(false);
     setIsCancelled(true);
-    methods.reset();
+    reset();
   };
 
   return (
@@ -60,24 +57,22 @@ export function ProfileForm({ addProject }) {
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <CustomFormItem
-              control={methods.control}
+              control={control}
               name="username"
               label="Name"
               placeholder="Organization name"
               description="What's the name of your company or team?"
-              validation={formSchema.username}
             />
             <CustomFormItem
-              control={methods.control}
+              control={control}
               name="description"
               label="Description"
               placeholder="Company Description"
               description="Describe your company?"
-              validation={formSchema.description}
             />
             <SeparatorDemo className="separator-demo" />
             <FormField
-              control={methods.control}
+              control={control}
               name="roles"
               render={() => (
                 <OriginalFormItem className="form-item">
@@ -109,7 +104,7 @@ export function ProfileForm({ addProject }) {
   );
 }
 
-export function CustomFormItem({ control, name, label, placeholder, description, validation }) {
+export function CustomFormItem({ control, name, label, placeholder, description }) {
   return (
     <div className="form-item">
       <FormLabel className="text-white">{label}</FormLabel>
@@ -117,8 +112,7 @@ export function CustomFormItem({ control, name, label, placeholder, description,
         <Controller
           name={name}
           control={control}
-          rules={{ required: validation }}
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <input
               {...field}
               placeholder={placeholder}

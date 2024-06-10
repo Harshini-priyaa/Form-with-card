@@ -15,10 +15,12 @@ body {
 }
 
 .app-header h1 {
-  font-size: 2em; /* Make the word "Projects" bigger */
+  font-size: 1.6rem; /* Make the word "Projects" bigger */
+  color: #a7a7a8;
+  display: flex;
+  justify-content: left;
+  margin-bottom: 1.5%;
 }
-
-
 
 .app-main {
   padding: 20px;
@@ -46,9 +48,14 @@ body {
   margin-top: 20px;
 }
 
+.hr{
+  color: #e1e0e1;
+}
+
 .search-input {
   padding: 10px;
   width: 200px;
+  border-radius: 10px;
 }
 
 .project-list {
@@ -67,13 +74,14 @@ body {
 
 .no-projects {
   margin-top: 20px;
+  
   display: flex;
   flex-direction: column;
   align-items: center; /* Center elements */
 }
 
 .no-projects h4 {
-  font-size: 1rem;
+  font-size: 1.6rem;
 }
 
 .no-projects p {
@@ -84,6 +92,7 @@ body {
 .new-project-button-main {
   align-self: center; /* Center the button */
 }
+
 .project-card {
   background-color: #1e1e1e;
   padding: 20px;

@@ -1,28 +1,40 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useParams } from 'react-router-dom';
 import NewProjectInterface from './NewProjectInterface';
 import { ProfileForm } from './Form';
-import ProjectDetails from './ProjectDetails';
-import './NewProjectInterface.css';
 
 function App() {
   const [projects, setProjects] = useState([]);
 
   const addProject = (project) => {
-    console.log("Adding Project:", project); // Debugging: Check added project data
     setProjects([...projects, project]);
   };
 
   return (
     <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<NewProjectInterface projects={projects} />} />
-          <Route path="/new-project" element={<ProfileForm addProject={addProject} />} />
-          <Route path="/project/:projectName" element={<ProjectDetails projects={projects} />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<NewProjectInterface projects={projects} />} />
+        <Route path="/new-project" element={<ProfileForm addProject={addProject} />} />
+        <Route path="/project/:username" element={<ProjectDetails projects={projects} />} />
+      </Routes>
     </Router>
+  );
+}
+
+function ProjectDetails({ projects }) {
+  const { username } = useParams();
+  const project = projects.find((p) => p.username === username);
+
+  if (!project) {
+    return <div>Project not found</div>;
+  }
+
+  return (
+    <div>
+      <h1>{project.username}</h1>
+      <p>{project.description}</p>
+      <p>Roles: {project.roles.join(', ')}</p>
+    </div>
   );
 }
 
