@@ -60,7 +60,9 @@ body {
 
 .project-title {
   font-weight: bold; /* Make "Fuzionest" bold */
-  font-size: 1.6rem;
+  font-size: 2rem;
+  display: flex;
+  justify-content: left;
 }
 
 .no-projects {

@@ -20,8 +20,9 @@ const NewProjectInterface = ({ projects }) => {
           <button className="new-project-button" onClick={handleNewProjectClick}>New project</button>
           <input type="text" placeholder="Search for a project" className="search-input" />
         </div>
+        <h2 className="project-title">Fuzionest</h2>
         <section className="project-list">
-          <h2 className="project-title">Fuzionest</h2>
+
           <hr />
           {projects.length === 0 ? (
             <div className="no-projects">
