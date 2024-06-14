@@ -44,11 +44,11 @@ const RolesInput = () => {
           Add
         </button>
       </div>
-      <div className="mt-2 flex flex-wrap space-x-2">
+      <div className="mt-2 flex flex-wrap">
         {fields.map((field, index) => (
           <span key={field.id} className="badge">
             {field.value}
-            <button type="button" onClick={() => remove(index)} className="text-red-500">
+            <button type="button" onClick={() => remove(index)} className="text-red-500 ml-2">
               &times;
             </button>
           </span>

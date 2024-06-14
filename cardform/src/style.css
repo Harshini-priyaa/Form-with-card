@@ -189,14 +189,23 @@ h4 {
     font-weight: bold; /* Made text bolder */
 }
 .badge {
-    display: inline-block;
-    padding: 0.1rem 0.10rem;
-    border-radius: 0.75rem; /* Make it oval-shaped */
-    background-color: #efeff5;
-    color: #30303e;
-    font-size: 0.875rem;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    background-color: #f3f4f6; /* Light gray background */
+    border-radius: 0.75rem; /* Full rounded corners */
     margin-top: 0.5rem;
     margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
+    color: #000; /* Text color */
+    font-size: 0.875rem; /* Text size */
+  }
+  
+  .badge button {
+    background: none;
+    border: none;
+    color: #ef4444; /* Red color for close button */
+    margin-left: 0.5rem;
+    cursor: pointer;
+    padding: 0; /* Remove padding */
   }
   

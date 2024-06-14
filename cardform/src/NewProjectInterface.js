@@ -22,7 +22,7 @@ const NewProjectInterface = ({ projects }) => {
         </div>
         <h2 className="project-title">Fuzionest</h2>
         <section className="project-list">
-          <hr />
+          <hr className="hr" />
           {projects.length === 0 ? (
             <div className="no-projects">
               <h4>No projects</h4>

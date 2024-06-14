@@ -48,8 +48,9 @@ body {
   margin-top: 20px;
 }
 
+
 .hr{
-  color: #e1e0e1;
+  border: 1px dashed #e1e0e1 ;
 }
 
 .search-input {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, useParams } from 'react-router-dom';
 import NewProjectInterface from './NewProjectInterface';
-import { ProfileForm } from './Form';
+import { ProfileForm } from './ProfileForm';
 
 function App() {
   const [projects, setProjects] = useState([]);

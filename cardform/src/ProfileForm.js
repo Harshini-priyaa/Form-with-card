@@ -3,8 +3,15 @@ import { useForm, FormProvider, Controller } from "react-hook-form";
 import { z } from "zod";
 import { useState } from "react";
 import { Button } from "./components/ui/button";
-import { FormField, FormItem as OriginalFormItem, FormLabel, FormControl, FormDescription, FormMessage } from "./components/ui/form";
-import { SeparatorDemo } from "./Separator";
+import {
+  FormField,
+  FormItem as OriginalFormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+} from "./components/ui/form";
+import { SeparatorDemo } from "./SeparatorDemo";
 import RolesInput from "./RolesInput";
 import { useNavigate } from 'react-router-dom';
 import "./style.css";
@@ -13,16 +20,17 @@ const formSchema = z.object({
   username: z.string().min(2, { message: "Username must be at least 2 characters." }),
   description: z.string().min(5, { message: "Description must be at least 5 characters." }),
   roles: z.array(z.string().min(1)).optional(),
+  businessModel: z.string().nonempty({ message: "Please select a separator card." }), // Add this line
 });
 
 export function ProfileForm({ addProject }) {
   const navigate = useNavigate();
   const methods = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { username: "", description: "", roles: [] },
+    defaultValues: { username: "", description: "", roles: [], businessModel: "" }, // Update defaultValues
   });
 
-  const { handleSubmit, control, reset } = methods;
+  const { handleSubmit, control, reset, setValue } = methods;
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCancelled, setIsCancelled] = useState(false);
 
@@ -43,12 +51,15 @@ export function ProfileForm({ addProject }) {
       console.error("Error submitting form:", error);
     }
   };
-  
 
   const onCancel = () => {
     setIsSubmitted(false);
     setIsCancelled(true);
     reset();
+  };
+
+  const handleSeparatorSelect = (selectedCard) => {
+    setValue('businessModel', selectedCard); // Set the selected card in form data
   };
 
   return (
@@ -70,7 +81,7 @@ export function ProfileForm({ addProject }) {
               placeholder="Company Description"
               description="Describe your company?"
             />
-            <SeparatorDemo className="separator-demo" />
+            <SeparatorDemo onCardSelect={handleSeparatorSelect} /> {/* Pass the handler */}
             <FormField
               control={control}
               name="roles"
