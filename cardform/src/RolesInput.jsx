@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
-import { Button } from './components/ui/button';
 
 const RolesInput = () => {
-  const { control, register } = useFormContext();
+  const { control } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'roles',

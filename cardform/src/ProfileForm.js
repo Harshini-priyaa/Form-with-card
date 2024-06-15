@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, FormProvider, Controller } from "react-hook-form";
+import { useForm, FormProvider, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { useState } from "react";
 import { Button } from "./components/ui/button";
@@ -19,15 +19,15 @@ import "./style.css";
 const formSchema = z.object({
   username: z.string().min(2, { message: "Username must be at least 2 characters." }),
   description: z.string().min(5, { message: "Description must be at least 5 characters." }),
-  roles: z.array(z.string().min(1)).optional(),
-  businessModel: z.string().nonempty({ message: "Please select a separator card." }), // Add this line
+  roles: z.array(z.object({ value: z.string().min(1, { message: "Role must be at least 1 character." }) })),
+  businessModel: z.string().nonempty({ message: "Please select a separator card." }),
 });
 
 export function ProfileForm({ addProject }) {
   const navigate = useNavigate();
   const methods = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { username: "", description: "", roles: [], businessModel: "" }, // Update defaultValues
+    defaultValues: { username: "", description: "", roles: [], businessModel: "" },
   });
 
   const { handleSubmit, control, reset, setValue } = methods;
@@ -38,8 +38,10 @@ export function ProfileForm({ addProject }) {
     try {
       await methods.trigger();
       if (methods.formState.isValid) {
-        console.log("Submitted Data:", data); // Debugging: Check submitted data
-        addProject(data);
+        const roles = data.roles.map(role => role.value); // Extract role values
+        const projectData = { ...data, roles }; // Combine role values with other data
+        console.log("Submitted Data:", projectData); // Debugging: Check submitted data
+        addProject(projectData);
         setIsSubmitted(true);
         setIsCancelled(false);
         alert("Details successfully submitted!");
@@ -81,7 +83,7 @@ export function ProfileForm({ addProject }) {
               placeholder="Company Description"
               description="Describe your company?"
             />
-            <SeparatorDemo onCardSelect={handleSeparatorSelect} /> {/* Pass the handler */}
+            <SeparatorDemo onCardSelect={handleSeparatorSelect} />
             <FormField
               control={control}
               name="roles"
@@ -101,12 +103,8 @@ export function ProfileForm({ addProject }) {
             {isSubmitted && <p>Details successfully submitted!</p>}
             {isCancelled && <p>Details cancelled!</p>}
             <div className="button-container">
-              <Button type="button" className="bg-red-500 text-white" onClick={onCancel}>
-                Cancel
-              </Button>
-              <Button type="submit" className="bg-green-600 text-white">
-                Submit
-              </Button>
+              <Button type="submit" className="submit-button">Submit</Button>
+              <Button type="button" onClick={onCancel} className="cancel-button">Cancel</Button>
             </div>
           </form>
         </FormProvider>
@@ -115,25 +113,27 @@ export function ProfileForm({ addProject }) {
   );
 }
 
-export function CustomFormItem({ control, name, label, placeholder, description }) {
-  return (
-    <div className="form-item">
-      <FormLabel className="text-white">{label}</FormLabel>
-      <FormControl>
-        <Controller
-          name={name}
-          control={control}
-          render={({ field, fieldState }) => (
-            <input
-              {...field}
-              placeholder={placeholder}
-              className="form-input"
-            />
-          )}
-        />
-      </FormControl>
-      <FormDescription className="form-description">{description}</FormDescription>
-      <FormMessage />
-    </div>
-  );
-}
+const CustomFormItem = ({ control, name, label, placeholder, description }) => (
+  <FormField
+    control={control}
+    name={name}
+    render={({ field }) => (
+      <OriginalFormItem className="form-item">
+        <FormLabel className="text-white">{label}</FormLabel>
+        <FormControl>
+          <input
+            {...field}
+            placeholder={placeholder}
+            className="text-black form-input"
+          />
+        </FormControl>
+        <FormDescription className="form-description">
+          {description}
+        </FormDescription>
+        <FormMessage />
+      </OriginalFormItem>
+    )}
+  />
+);
+
+export default ProfileForm;
