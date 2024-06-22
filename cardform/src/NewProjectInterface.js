@@ -13,7 +13,7 @@ const NewProjectInterface = ({ projects }) => {
     <div className="app-container">
       <header className="app-header">
         <h1><b>Projects</b></h1>
-        <hr className="hr" />
+        <hr />
       </header>
       <main className="app-main">
         <div className="toolbar">
@@ -22,7 +22,7 @@ const NewProjectInterface = ({ projects }) => {
         </div>
         <h2 className="project-title">Fuzionest</h2>
         <section className="project-list">
-          <hr className="hr" />
+          <hr className="dashed-line" />
           {projects.length === 0 ? (
             <div className="no-projects">
               <h4>No projects</h4>

@@ -44,7 +44,7 @@ export function ProfileForm({ addProject }) {
         addProject(projectData);
         setIsSubmitted(true);
         setIsCancelled(false);
-        alert("Details successfully submitted!");
+        // alert("Details successfully submitted!");
         navigate(`/project/${data.username}`);
       } else {
         alert("Please fill in all details and select a separator card.");
