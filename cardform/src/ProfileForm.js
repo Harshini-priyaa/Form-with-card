@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, FormProvider, useFieldArray } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { z } from "zod";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "./components/ui/button";
 import {
   FormField,
@@ -13,7 +13,7 @@ import {
 } from "./components/ui/form";
 import { SeparatorDemo } from "./SeparatorDemo";
 import RolesInput from "./RolesInput";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import "./style.css";
 
 const formSchema = z.object({
@@ -25,6 +25,7 @@ const formSchema = z.object({
 
 export function ProfileForm({ addProject }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const methods = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: { username: "", description: "", roles: [], businessModel: "" },
@@ -33,6 +34,16 @@ export function ProfileForm({ addProject }) {
   const { handleSubmit, control, reset, setValue } = methods;
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCancelled, setIsCancelled] = useState(false);
+
+  useEffect(() => {
+    if (location.state && location.state.project) {
+      const project = location.state.project;
+      setValue('username', project.username);
+      setValue('description', project.description);
+      setValue('roles', project.roles.map(role => ({ value: role })));
+      setValue('businessModel', project.businessModel);
+    }
+  }, [location, setValue]);
 
   const onSubmit = async (data) => {
     try {
@@ -44,7 +55,6 @@ export function ProfileForm({ addProject }) {
         addProject(projectData);
         setIsSubmitted(true);
         setIsCancelled(false);
-        // alert("Details successfully submitted!");
         navigate(`/project/${data.username}`);
       } else {
         alert("Please fill in all details and select a separator card.");

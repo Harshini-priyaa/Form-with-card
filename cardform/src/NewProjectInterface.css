@@ -111,3 +111,20 @@ body {
 .project-card p {
   margin: 5px 0;
 }
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Three cards per row */
+  gap: 20px; /* Space between cards */
+}
+
+.project-card {
+  background-color: #1e1e1e; /* Background color of the cards */
+  padding: 20px;
+  border-radius: 5px;
+  text-align: left;
+  width: 500px; /* Fixed width */
+  height: 300px; /* Fixed height */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
