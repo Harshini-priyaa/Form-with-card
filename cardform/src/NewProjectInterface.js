@@ -1,12 +1,34 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import ProfileForm from './ProfileForm'; // Make sure ProfileForm is correctly imported
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './NewProjectInterface.css';
 
-const NewProjectInterface = ({ projects }) => {
+const NewProjectInterface = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [projects, setProjects] = useState([]);
 
   const handleNewProjectClick = () => {
     navigate('/new-project');
+  };
+
+  const addProject = (project) => {
+    setProjects((prevProjects) => [...prevProjects, project]);
+    toast.success('Project added successfully!', {
+      onClose: () => {
+        navigate('/'); // Ensure it navigates back to the main project interface
+      },
+    });
+  };
+
+  const handleEditClick = (project) => {
+    navigate('/new-project', { state: { project } });
+  };
+
+  const handleMenuClick = (username) => {
+    // Logic to handle menu click, e.g., toggle dropdown menu
   };
 
   return (
@@ -71,17 +93,37 @@ const NewProjectInterface = ({ projects }) => {
                 </button>
               </div>
             ) : (
-              projects.map((project, index) => (
-                <div key={index} className="project-card">
-                  <h3>{project.username}</h3>
-                  <p>{project.description}</p>
-                  <p>Roles: {project.roles.join(', ')}</p>
+              projects.map((project) => (
+                <div key={project.username} className="project-card">
+                  <div className="project-header">
+                    <h2 className="project-title">{project.username}</h2>
+                    <div className="menu-container">
+                      <button onClick={() => handleMenuClick(project.username)} className="menu-button">
+                        ⋮
+                      </button>
+                      <div className="dropdown-menu">
+                        <button onClick={() => alert(`Viewing details for ${project.username}`)}>View</button>
+                        <button onClick={() => handleEditClick(project)}>Edit</button>
+                      </div>
+                    </div>
+                  </div>
+                  <hr />
+                  <div className="project-details">
+                    <h4>Description</h4>
+                    <p>{project.description}</p>
+                    <h4>Roles</h4>
+                    <p>{project.roles.join(', ')}</p>
+                  </div>
                 </div>
               ))
             )}
           </section>
+          <ToastContainer />
         </main>
       </div>
+      {location.pathname === '/new-project' && (
+        <ProfileForm addProject={addProject} />
+      )}
     </div>
   );
 };

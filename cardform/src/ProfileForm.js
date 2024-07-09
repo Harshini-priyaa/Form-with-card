@@ -14,6 +14,8 @@ import {
 import { SeparatorDemo } from "./SeparatorDemo";
 import RolesInput from "./RolesInput";
 import { useNavigate, useLocation } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "./style.css";
 
 const formSchema = z.object({
@@ -32,8 +34,6 @@ export function ProfileForm({ addProject }) {
   });
 
   const { handleSubmit, control, reset, setValue } = methods;
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isCancelled, setIsCancelled] = useState(false);
 
   useEffect(() => {
     if (location.state && location.state.project) {
@@ -51,11 +51,12 @@ export function ProfileForm({ addProject }) {
       if (methods.formState.isValid) {
         const roles = data.roles.map(role => role.value); // Extract role values
         const projectData = { ...data, roles }; // Combine role values with other data
-        console.log("Submitted Data:", projectData); // Debugging: Check submitted data
         addProject(projectData);
-        setIsSubmitted(true);
-        setIsCancelled(false);
-        navigate(`/project/${data.username}`);
+        toast.success('Your details have been successfully submitted!', {
+          onClose: () => {
+            navigate('/');
+          },
+        });
       } else {
         alert("Please fill in all details and select a separator card.");
       }
@@ -65,8 +66,6 @@ export function ProfileForm({ addProject }) {
   };
 
   const onCancel = () => {
-    setIsSubmitted(false);
-    setIsCancelled(true);
     reset();
   };
 
@@ -77,6 +76,7 @@ export function ProfileForm({ addProject }) {
   return (
     <div className="flex items-center justify-center min-h-screen bg-black">
       <div className="form-container max-w-md p-6 bg-gray-800 rounded-lg shadow-md">
+        <ToastContainer />
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <CustomFormItem
@@ -110,8 +110,6 @@ export function ProfileForm({ addProject }) {
                 </OriginalFormItem>
               )}
             />
-            {isSubmitted && <p>Details successfully submitted!</p>}
-            {isCancelled && <p>Details cancelled!</p>}
             <div className="button-container">
               <Button type="submit" className="submit-button">Submit</Button>
               <Button type="button" onClick={onCancel} className="cancel-button">Cancel</Button>
