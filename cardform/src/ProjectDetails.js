@@ -1,26 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import './ProjectDetails.css'; // Import the CSS file for styling
+import './NewProjectInterface.css';  // Reusing the CSS file
 
 const ProjectDetails = ({ projects }) => {
   const { username } = useParams();
   const project = projects.find((proj) => proj.username === username);
   const navigate = useNavigate();
-
-  const [dropdownOpen, setDropdownOpen] = useState(null);
-
-  const handleMenuClick = (username) => {
-    setDropdownOpen(dropdownOpen === username ? null : username);
-  };
-
-  const handleViewClick = (project) => {
-    // Handle view logic here, e.g., show a modal or navigate to a detailed view
-    alert(`Viewing details for ${project.username}`);
-  };
-
-  const handleEditClick = (project) => {
-    navigate('/new-project', { state: { project } });
-  };
 
   if (!project) {
     return <div>Project not found</div>;
@@ -28,30 +13,63 @@ const ProjectDetails = ({ projects }) => {
 
   return (
     <div className="app-container">
-      <header className="app-header">
-        <h1><b>Projects</b></h1>
-        <hr />
-      </header>
-      <main className="app-main">
-        <div className="toolbar">
-          <button className="new-project-button" onClick={() => window.location.href = '/new-project'}>New project</button>
-          <input type="text" placeholder="Search for a project" className="search-input" />
+      <aside className="sidebar">
+        <div className="sidebar-header">
+          <h2>Dashboard</h2>
         </div>
-        <section className="project-grid">
-          {projects.map((project) => (
-            <div key={project.username} className="project-card">
+        <div className="sidebar-section">
+          <h3>Projects</h3>
+          <ul>
+            <li>All projects</li>
+          </ul>
+        </div>
+        <div className="sidebar-section">
+          <h3>Organizations</h3>
+          <ul>
+            <li>Kishore Fuzionest</li>
+            <li>subash018's Org</li>
+            <li>tamilarasu@fuzionest.com's Org</li>
+          </ul>
+        </div>
+        <div className="sidebar-section">
+          <h3>Account</h3>
+          <ul>
+            <li>Preferences</li>
+            <li>Access Tokens</li>
+            <li>Security</li>
+            <li>Audit Logs</li>
+          </ul>
+        </div>
+        <div className="sidebar-section">
+          <h3>Documentation</h3>
+          <ul>
+            <li>Guides</li>
+            <li>API Reference</li>
+          </ul>
+        </div>
+        <div className="sidebar-footer">
+          <button className="logout-button">Log out</button>
+        </div>
+      </aside>
+      <div className="main-content">
+        <header className="app-header">
+          <h1><b>Project Details</b></h1>
+          <hr />
+        </header>
+        <main className="app-main">
+          <div className="toolbar">
+            <button className="new-project-button" onClick={() => navigate('/')}>Back to Projects</button>
+          </div>
+          <h2 className="project-title">{project.username}</h2>
+          <section className="project-list">
+            <div className="project-card">
               <div className="project-header">
                 <h2 className="project-title">{project.username}</h2>
                 <div className="menu-container">
-                  <button onClick={() => handleMenuClick(project.username)} className="menu-button">
-                    ⋮
-                  </button>
-                  {dropdownOpen === project.username && (
-                    <div className="dropdown-menu">
-                      <button onClick={() => handleViewClick(project)}>View</button>
-                      <button onClick={() => handleEditClick(project)}>Edit</button>
-                    </div>
-                  )}
+                  <button className="menu-button">⋮</button>
+                  <div className="dropdown-menu">
+                    <button onClick={() => navigate(`/new-project`, { state: { project } })}>Edit</button>
+                  </div>
                 </div>
               </div>
               <hr />
@@ -62,9 +80,9 @@ const ProjectDetails = ({ projects }) => {
                 <p>{project.roles.join(', ')}</p>
               </div>
             </div>
-          ))}
-        </section>
-      </main>
+          </section>
+        </main>
+      </div>
     </div>
   );
 };

@@ -1,21 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, FormProvider } from "react-hook-form";
 import { z } from "zod";
-import { useState, useEffect } from "react";
-import { Button } from "./components/ui/button";
-import {
-  FormField,
-  FormItem as OriginalFormItem,
-  FormLabel,
-  FormControl,
-  FormDescription,
-  FormMessage,
-} from "./components/ui/form";
-import { SeparatorDemo } from "./SeparatorDemo";
-import RolesInput from "./RolesInput";
+import { useEffect } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Button } from "./components/ui/button";
+import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "./components/ui/form";
+import { SeparatorDemo } from "./SeparatorDemo";
+import RolesInput from "./RolesInput";
 import "./style.css";
 
 const formSchema = z.object({
@@ -49,12 +42,12 @@ export function ProfileForm({ addProject }) {
     try {
       await methods.trigger();
       if (methods.formState.isValid) {
-        const roles = data.roles.map(role => role.value); // Extract role values
-        const projectData = { ...data, roles }; // Combine role values with other data
+        const roles = data.roles.map(role => role.value);
+        const projectData = { ...data, roles };
         addProject(projectData);
         toast.success('Your details have been successfully submitted!', {
           onClose: () => {
-            navigate('/');
+            navigate(`/project/${data.username}`);
           },
         });
       } else {
@@ -67,10 +60,11 @@ export function ProfileForm({ addProject }) {
 
   const onCancel = () => {
     reset();
+    navigate('/');
   };
 
   const handleSeparatorSelect = (selectedCard) => {
-    setValue('businessModel', selectedCard); // Set the selected card in form data
+    setValue('businessModel', selectedCard);
   };
 
   return (
@@ -98,7 +92,7 @@ export function ProfileForm({ addProject }) {
               control={control}
               name="roles"
               render={() => (
-                <OriginalFormItem className="form-item">
+                <FormItem className="form-item">
                   <FormLabel className="text-white">Roles</FormLabel>
                   <FormControl>
                     <RolesInput />
@@ -107,7 +101,7 @@ export function ProfileForm({ addProject }) {
                     The current role you play in your company
                   </FormDescription>
                   <FormMessage />
-                </OriginalFormItem>
+                </FormItem>
               )}
             />
             <div className="button-container">
@@ -126,20 +120,20 @@ const CustomFormItem = ({ control, name, label, placeholder, description }) => (
     control={control}
     name={name}
     render={({ field }) => (
-      <OriginalFormItem className="form-item">
+      <FormItem className="form-item">
         <FormLabel className="text-white">{label}</FormLabel>
         <FormControl>
           <input
-            {...field}
+            className="form-input"
             placeholder={placeholder}
-            className="text-black form-input"
+            {...field}
           />
         </FormControl>
         <FormDescription className="form-description">
           {description}
         </FormDescription>
         <FormMessage />
-      </OriginalFormItem>
+      </FormItem>
     )}
   />
 );

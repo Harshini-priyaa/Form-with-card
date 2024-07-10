@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NewProjectInterface from './NewProjectInterface';
-import { ProfileForm } from './ProfileForm';
+import ProfileForm from './ProfileForm';
 import ProjectDetails from './ProjectDetails';
 
 function App() {
   const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    // Clear local storage data on initial load
+    localStorage.removeItem('projects');
+  }, []);
 
   const addProject = (project) => {
     setProjects([...projects, project]);

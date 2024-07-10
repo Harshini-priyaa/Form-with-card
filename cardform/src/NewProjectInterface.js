@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import ProfileForm from './ProfileForm'; // Make sure ProfileForm is correctly imported
+import ProfileForm from './ProfileForm';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './NewProjectInterface.css';
@@ -8,7 +8,14 @@ import './NewProjectInterface.css';
 const NewProjectInterface = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState(() => {
+    const storedProjects = localStorage.getItem('projects');
+    return storedProjects ? JSON.parse(storedProjects) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('projects', JSON.stringify(projects));
+  }, [projects]);
 
   const handleNewProjectClick = () => {
     navigate('/new-project');
@@ -18,17 +25,9 @@ const NewProjectInterface = () => {
     setProjects((prevProjects) => [...prevProjects, project]);
     toast.success('Project added successfully!', {
       onClose: () => {
-        navigate('/'); // Ensure it navigates back to the main project interface
+        navigate(`/project/${project.username}`);
       },
     });
-  };
-
-  const handleEditClick = (project) => {
-    navigate('/new-project', { state: { project } });
-  };
-
-  const handleMenuClick = (username) => {
-    // Logic to handle menu click, e.g., toggle dropdown menu
   };
 
   return (
@@ -83,7 +82,6 @@ const NewProjectInterface = () => {
           </div>
           <h2 className="project-title">Fuzionest</h2>
           <section className="project-list">
-            
             {projects.length === 0 ? (
               <div className="no-projects">
                 <h4>No projects</h4>
@@ -98,12 +96,10 @@ const NewProjectInterface = () => {
                   <div className="project-header">
                     <h2 className="project-title">{project.username}</h2>
                     <div className="menu-container">
-                      <button onClick={() => handleMenuClick(project.username)} className="menu-button">
-                        ⋮
-                      </button>
+                      <button className="menu-button">⋮</button>
                       <div className="dropdown-menu">
                         <button onClick={() => alert(`Viewing details for ${project.username}`)}>View</button>
-                        <button onClick={() => handleEditClick(project)}>Edit</button>
+                        <button onClick={() => navigate('/new-project', { state: { project } })}>Edit</button>
                       </div>
                     </div>
                   </div>
