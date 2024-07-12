@@ -12,6 +12,8 @@ const NewProjectInterface = () => {
     const storedProjects = localStorage.getItem('projects');
     return storedProjects ? JSON.parse(storedProjects) : [];
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const projectsPerPage = 3;
 
   useEffect(() => {
     localStorage.setItem('projects', JSON.stringify(projects));
@@ -25,10 +27,16 @@ const NewProjectInterface = () => {
     setProjects((prevProjects) => [...prevProjects, project]);
     toast.success('Project added successfully!', {
       onClose: () => {
-        navigate(`/project/${project.username}`);
+        navigate('/');
       },
     });
   };
+
+  const indexOfLastProject = currentPage * projectsPerPage;
+  const indexOfFirstProject = indexOfLastProject - projectsPerPage;
+  const currentProjects = projects.slice(indexOfFirstProject, indexOfLastProject);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="app-container">
@@ -91,27 +99,38 @@ const NewProjectInterface = () => {
                 </button>
               </div>
             ) : (
-              projects.map((project) => (
-                <div key={project.username} className="project-card">
-                  <div className="project-header">
-                    <h2 className="project-title">{project.username}</h2>
-                    <div className="menu-container">
-                      <button className="menu-button">⋮</button>
-                      <div className="dropdown-menu">
-                        <button onClick={() => alert(`Viewing details for ${project.username}`)}>View</button>
-                        <button onClick={() => navigate('/new-project', { state: { project } })}>Edit</button>
+              <>
+                <div className="project-grid">
+                  {currentProjects.map((project) => (
+                    <div key={project.username} className="project-card">
+                      <div className="project-header">
+                        <h2 className="project-title">{project.username}</h2>
+                        <div className="menu-container">
+                          <button className="menu-button">⋮</button>
+                          <div className="dropdown-menu">
+                            <button onClick={() => alert(`Viewing details for ${project.username}`)}>View</button>
+                            <button onClick={() => navigate('/new-project', { state: { project } })}>Edit</button>
+                          </div>
+                        </div>
+                      </div>
+                      <hr />
+                      <div className="project-details">
+                        <h4>Description</h4>
+                        <p>{project.description}</p>
+                        <h4>Roles</h4>
+                        <p>{project.roles.join(', ')}</p>
                       </div>
                     </div>
-                  </div>
-                  <hr />
-                  <div className="project-details">
-                    <h4>Description</h4>
-                    <p>{project.description}</p>
-                    <h4>Roles</h4>
-                    <p>{project.roles.join(', ')}</p>
-                  </div>
+                  ))}
                 </div>
-              ))
+                <div className="pagination">
+                  {Array.from({ length: Math.ceil(projects.length / projectsPerPage) }, (_, i) => (
+                    <button key={i + 1} onClick={() => paginate(i + 1)} className={`page-button ${currentPage === i + 1 ? 'active' : ''}`}>
+                      {i + 1}
+                    </button>
+                  ))}
+                </div>
+              </>
             )}
           </section>
           <ToastContainer />
