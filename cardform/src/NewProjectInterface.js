@@ -16,6 +16,13 @@ const NewProjectInterface = () => {
   const projectsPerPage = 3;
 
   useEffect(() => {
+    const storedProjects = localStorage.getItem('projects');
+    if (storedProjects) {
+      setProjects(JSON.parse(storedProjects));
+    }
+  }, [location]);
+
+  useEffect(() => {
     localStorage.setItem('projects', JSON.stringify(projects));
   }, [projects]);
 
@@ -47,7 +54,7 @@ const NewProjectInterface = () => {
         <div className="sidebar-section">
           <h3>Projects</h3>
           <ul>
-            <li>All projects</li>
+            <li onClick={() => navigate('/')}>All projects</li>
           </ul>
         </div>
         <div className="sidebar-section">
@@ -75,7 +82,7 @@ const NewProjectInterface = () => {
           </ul>
         </div>
         <div className="sidebar-footer">
-          <button className="logout-button">Log out</button>
+          <button className="logout-button" onClick={() => alert('Logging out...')}>Log out</button>
         </div>
       </aside>
       <div className="main-content">
