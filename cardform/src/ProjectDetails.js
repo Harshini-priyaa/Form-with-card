@@ -2,10 +2,16 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './NewProjectInterface.css';  // Reusing the CSS file
 
-const ProjectDetails = ({ projects }) => {
+const ProjectDetails = ({ projects, setProjects }) => {
   const { username } = useParams();
   const project = projects.find((proj) => proj.username === username);
   const navigate = useNavigate();
+
+  const handleDelete = (usernameToDelete) => {
+    const updatedProjects = projects.filter((proj) => proj.username !== usernameToDelete);
+    setProjects(updatedProjects);
+    navigate('/'); // Navigate back to the project list after deletion
+  };
 
   if (!project) {
     return <div>Project not found</div>;
@@ -61,25 +67,28 @@ const ProjectDetails = ({ projects }) => {
             <button className="new-project-button" onClick={() => navigate('/')}>Back to Projects</button>
           </div>
           <h2 className="project-title">{project.username}</h2>
-          <section className="project-list">
-            <div className="project-card">
-              <div className="project-header">
-                <h2 className="project-title">{project.username}</h2>
-                <div className="menu-container">
-                  <button className="menu-button">⋮</button>
-                  <div className="dropdown-menu">
-                    <button onClick={() => navigate(`/new-project`, { state: { project } })}>Edit</button>
+          <section className="project-grid">
+            {projects.map((proj) => (
+              <div key={proj.username} className="project-card">
+                <div className="project-header">
+                  <h2 className="project-title">{proj.username}</h2>
+                  <div className="menu-container">
+                    <button className="menu-button">⋮</button>
+                    <div className="dropdown-menu">
+                      <button onClick={() => navigate(`/new-project`, { state: { project: proj } })}>Edit</button>
+                      <button onClick={() => handleDelete(proj.username)}>Delete</button>
+                    </div>
                   </div>
                 </div>
+                <hr />
+                <div className="project-details">
+                  <h4>Description</h4>
+                  <p>{proj.description}</p>
+                  <h4>Roles</h4>
+                  <p>{proj.roles.join(', ')}</p>
+                </div>
               </div>
-              <hr />
-              <div className="project-details">
-                <h4>Description</h4>
-                <p>{project.description}</p>
-                <h4>Roles</h4>
-                <p>{project.roles.join(', ')}</p>
-              </div>
-            </div>
+            ))}
           </section>
         </main>
       </div>
