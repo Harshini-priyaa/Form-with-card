@@ -13,6 +13,10 @@ const ProjectDetails = ({ projects, setProjects }) => {
     navigate('/'); // Navigate back to the project list after deletion
   };
 
+  const handleNewProjectClick = () => {
+    navigate('/new-project');
+  };
+  
   if (!project) {
     return <div>Project not found</div>;
   }
@@ -64,7 +68,8 @@ const ProjectDetails = ({ projects, setProjects }) => {
         </header>
         <main className="app-main">
           <div className="toolbar">
-            <button className="new-project-button" onClick={() => navigate('/')}>Back to Projects</button>
+            <button className="new-project-button" onClick={handleNewProjectClick}>New project</button>
+            <input type="text" placeholder="Search for a project" className="search-input" />
           </div>
           <h2 className="project-title">{project.username}</h2>
           <section className="project-grid">
@@ -75,8 +80,9 @@ const ProjectDetails = ({ projects, setProjects }) => {
                   <div className="menu-container">
                     <button className="menu-button">⋮</button>
                     <div className="dropdown-menu">
-                      <button onClick={() => navigate(`/new-project`, { state: { project: proj } })}>Edit</button>
-                      <button onClick={() => handleDelete(proj.username)}>Delete</button>
+                      <button onClick={() => alert(`Viewing details for ${proj.username}`)}>View</button>
+                      <button onClick={() => navigate('/new-project', { state: { project: proj } })}>Edit</button>
+                      <button onClick={() => handleDelete(proj.username)}>Delete</button> {/* Use handleDelete function */}
                     </div>
                   </div>
                 </div>

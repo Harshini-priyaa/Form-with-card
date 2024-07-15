@@ -39,6 +39,12 @@ const NewProjectInterface = () => {
     });
   };
 
+  const deleteProject = (usernameToDelete) => {
+    const updatedProjects = projects.filter((project) => project.username !== usernameToDelete);
+    setProjects(updatedProjects);
+    toast.success('Project deleted successfully!');
+  };
+
   const indexOfLastProject = currentPage * projectsPerPage;
   const indexOfFirstProject = indexOfLastProject - projectsPerPage;
   const currentProjects = projects.slice(indexOfFirstProject, indexOfLastProject);
@@ -117,6 +123,7 @@ const NewProjectInterface = () => {
                           <div className="dropdown-menu">
                             <button onClick={() => alert(`Viewing details for ${project.username}`)}>View</button>
                             <button onClick={() => navigate('/new-project', { state: { project } })}>Edit</button>
+                            <button onClick={() => deleteProject(project.username)}>Delete</button>
                           </div>
                         </div>
                       </div>

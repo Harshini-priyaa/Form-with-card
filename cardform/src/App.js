@@ -5,23 +5,37 @@ import ProfileForm from './ProfileForm';
 import ProjectDetails from './ProjectDetails';
 
 function App() {
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState(() => {
+    const storedProjects = localStorage.getItem('projects');
+    return storedProjects ? JSON.parse(storedProjects) : [];
+  });
 
   useEffect(() => {
-    // Clear local storage data on initial load
-    localStorage.removeItem('projects');
-  }, []);
+    localStorage.setItem('projects', JSON.stringify(projects));
+  }, [projects]);
 
   const addProject = (project) => {
-    setProjects([...projects, project]);
+    setProjects((prevProjects) => [...prevProjects, project]);
+  };
+
+  const updateProject = (updatedProject) => {
+    setProjects((prevProjects) =>
+      prevProjects.map((project) =>
+        project.username === updatedProject.username ? updatedProject : project
+      )
+    );
+  };
+
+  const deleteProject = (username) => {
+    setProjects((prevProjects) => prevProjects.filter((project) => project.username !== username));
   };
 
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<NewProjectInterface projects={projects} />} />
+        <Route path="/" element={<NewProjectInterface projects={projects} addProject={addProject} />} />
         <Route path="/new-project" element={<ProfileForm addProject={addProject} />} />
-        <Route path="/project/:username" element={<ProjectDetails projects={projects} />} />
+        <Route path="/project/:username" element={<ProjectDetails projects={projects} updateProject={updateProject} deleteProject={deleteProject} />} />
       </Routes>
     </Router>
   );
